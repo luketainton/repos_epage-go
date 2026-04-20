@@ -194,7 +194,9 @@ func TestHandleSendInvalidForm(t *testing.T) {
 func TestTemplateCache(t *testing.T) {
 	tmpDir := t.TempDir()
 	templatesDir := filepath.Join(tmpDir, "templates")
-	os.Mkdir(templatesDir, 0755)
+	if err := os.Mkdir(templatesDir, 0755); err != nil {
+		t.Fatalf("Failed to create templates directory: %v", err)
+	}
 
 	templateContent := `<html><body>Cached</body></html>`
 	templatePath := filepath.Join(templatesDir, "index.html")
@@ -237,12 +239,16 @@ func TestLoadTemplateNotFound(t *testing.T) {
 func TestLoadTemplateInvalidTemplate(t *testing.T) {
 	tmpDir := t.TempDir()
 	templatesDir := filepath.Join(tmpDir, "templates")
-	os.Mkdir(templatesDir, 0755)
+	if err := os.Mkdir(templatesDir, 0755); err != nil {
+		t.Fatalf("Failed to create templates directory: %v", err)
+	}
 
 	// Create invalid template with unclosed action
 	invalidContent := `<html><body>{{.unclosed</body></html>`
 	templatePath := filepath.Join(templatesDir, "invalid.html")
-	os.WriteFile(templatePath, []byte(invalidContent), 0644)
+	if err := os.WriteFile(templatePath, []byte(invalidContent), 0644); err != nil {
+		t.Fatalf("Failed to create test template: %v", err)
+	}
 
 	clearTemplateCache()
 
@@ -269,7 +275,9 @@ func clearTemplateCache() {
 func createTestServer(t *testing.T) *httptest.Server {
 	tmpDir := t.TempDir()
 	templatesDir := filepath.Join(tmpDir, "templates")
-	os.Mkdir(templatesDir, 0755)
+	if err := os.Mkdir(templatesDir, 0755); err != nil {
+		t.Fatalf("Failed to create templates directory: %v", err)
+	}
 
 	templateContent := `
 <html>
@@ -279,7 +287,9 @@ func createTestServer(t *testing.T) *httptest.Server {
 </html>
 `
 	templatePath := filepath.Join(templatesDir, "index.html")
-	os.WriteFile(templatePath, []byte(templateContent), 0644)
+	if err := os.WriteFile(templatePath, []byte(templateContent), 0644); err != nil {
+		t.Fatalf("Failed to create test template: %v", err)
+	}
 
 	clearTemplateCache()
 
