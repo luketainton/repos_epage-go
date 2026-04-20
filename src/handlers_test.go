@@ -40,7 +40,7 @@ func TestHandleIndexGET(t *testing.T) {
 	templatePath := filepath.Join(templatesDir, "index.html")
 	err := os.WriteFile(templatePath, []byte(templateContent), 0644)
 	if err != nil {
-		t.Fatalf("Failed to create test template: %v", err)
+		t.Fatalf(errCreateTemplate, err)
 	}
 
 	// Clear the template cache before test
@@ -252,7 +252,7 @@ func TestLoadTemplateInvalidTemplate(t *testing.T) {
 	invalidContent := `<html><body>{{.unclosed</body></html>`
 	templatePath := filepath.Join(templatesDir, "invalid.html")
 	if err := os.WriteFile(templatePath, []byte(invalidContent), 0644); err != nil {
-		t.Fatalf("Failed to create test template: %v", err)
+		t.Fatalf(errCreateTemplate, err)
 	}
 
 	clearTemplateCache()
