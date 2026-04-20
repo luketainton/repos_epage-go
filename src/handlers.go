@@ -8,6 +8,10 @@ import (
 	"sync"
 )
 
+const (
+	errExecutingTemplate = "Error executing template: %v"
+)
+
 var (
 	templateCache = make(map[string]*template.Template)
 	cacheMutex    sync.RWMutex
@@ -49,7 +53,7 @@ func handleIndex(baseDir string) http.HandlerFunc {
 
 		err = indexTemplate.Execute(w, data)
 		if err != nil {
-			log.Printf("Error executing template: %v", err)
+			log.Printf(errExecutingTemplate, err)
 			http.Error(w, "Internal Server Error", http.StatusInternalServerError)
 		}
 	}
@@ -83,7 +87,7 @@ func handleSend(baseDir, apiToken, userKey string) http.HandlerFunc {
 		}
 		err = indexTemplate.Execute(w, data)
 		if err != nil {
-			log.Printf("Error executing template: %v", err)
+			log.Printf(errExecutingTemplate, err)
 			http.Error(w, "Internal Server Error", http.StatusInternalServerError)
 		}
 		return
@@ -107,7 +111,7 @@ func handleSend(baseDir, apiToken, userKey string) http.HandlerFunc {
 
 		err = indexTemplate.Execute(w, data)
 		if err != nil {
-			log.Printf("Error executing template: %v", err)
+			log.Printf(errExecutingTemplate, err)
 			http.Error(w, "Internal Server Error", http.StatusInternalServerError)
 		}
 	}
