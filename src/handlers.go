@@ -59,6 +59,16 @@ func handleIndex(baseDir string) http.HandlerFunc {
 	}
 }
 
+func renderTemplate(w http.ResponseWriter, tmpl *template.Template, status string) {
+	data := map[string]string{
+		"status": status,
+	}
+	if err := tmpl.Execute(w, data); err != nil {
+		log.Printf(errExecutingTemplate, err)
+		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+	}
+}
+
 func handleSend(baseDir, apiToken, userKey string) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		indexTemplate, err := loadTemplate(baseDir, "index.html")
@@ -69,8 +79,7 @@ func handleSend(baseDir, apiToken, userKey string) http.HandlerFunc {
 		}
 
 		// Parse form data
-		err = r.ParseForm()
-		if err != nil {
+		if err = r.ParseForm(); err != nil {
 			log.Printf("Error parsing form: %v", err)
 			http.Error(w, "Bad Request", http.StatusBadRequest)
 			return
@@ -80,39 +89,23 @@ func handleSend(baseDir, apiToken, userKey string) http.HandlerFunc {
 		email := r.FormValue("email")
 		message := r.FormValue("message")
 
-	// Validate required fields
-	if name == "" || email == "" || message == "" {
-		data := map[string]string{
-			"status": "fail",
+		// Validate required fields
+		if name == "" || email == "" || message == "" {
+			renderTemplate(w, indexTemplate, "fail")
+			return
 		}
-		err = indexTemplate.Execute(w, data)
-		if err != nil {
-			log.Printf(errExecutingTemplate, err)
-			http.Error(w, "Internal Server Error", http.StatusInternalServerError)
-		}
-		return
-	}
 
 		// Send page via Pushover
 		success, err := sendPage(apiToken, userKey, name, email, message)
+		if err != nil {
+			log.Printf("Error sending page: %v", err)
+		}
 
 		status := "fail"
 		if success {
 			status = "success"
 		}
 
-		data := map[string]string{
-			"status": status,
-		}
-
-		if err != nil {
-			log.Printf("Error sending page: %v", err)
-		}
-
-		err = indexTemplate.Execute(w, data)
-		if err != nil {
-			log.Printf(errExecutingTemplate, err)
-			http.Error(w, "Internal Server Error", http.StatusInternalServerError)
-		}
+		renderTemplate(w, indexTemplate, status)
 	}
 }
