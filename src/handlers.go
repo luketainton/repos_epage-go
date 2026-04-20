@@ -76,14 +76,18 @@ func handleSend(baseDir, apiToken, userKey string) http.HandlerFunc {
 		email := r.FormValue("email")
 		message := r.FormValue("message")
 
-		// Validate required fields
-		if name == "" || email == "" || message == "" {
-			data := map[string]string{
-				"status": "fail",
-			}
-			indexTemplate.Execute(w, data)
-			return
+	// Validate required fields
+	if name == "" || email == "" || message == "" {
+		data := map[string]string{
+			"status": "fail",
 		}
+		err = indexTemplate.Execute(w, data)
+		if err != nil {
+			log.Printf("Error executing template: %v", err)
+			http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+		}
+		return
+	}
 
 		// Send page via Pushover
 		success, err := sendPage(apiToken, userKey, name, email, message)

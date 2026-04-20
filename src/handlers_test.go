@@ -14,7 +14,9 @@ func TestHandleIndexGET(t *testing.T) {
 	// Create a temporary directory with a test template
 	tmpDir := t.TempDir()
 	templatesDir := filepath.Join(tmpDir, "templates")
-	os.Mkdir(templatesDir, 0755)
+	if err := os.Mkdir(templatesDir, 0755); err != nil {
+		t.Fatalf("Failed to create templates directory: %v", err)
+	}
 
 	// Create a simple test template
 	templateContent := `
@@ -64,7 +66,9 @@ func TestHandleSendPOST(t *testing.T) {
 	// Create a temporary directory with a test template
 	tmpDir := t.TempDir()
 	templatesDir := filepath.Join(tmpDir, "templates")
-	os.Mkdir(templatesDir, 0755)
+	if err := os.Mkdir(templatesDir, 0755); err != nil {
+		t.Fatalf("Failed to create templates directory: %v", err)
+	}
 
 	// Create a simple test template
 	templateContent := `
@@ -79,7 +83,9 @@ func TestHandleSendPOST(t *testing.T) {
 </html>
 `
 	templatePath := filepath.Join(templatesDir, "index.html")
-	os.WriteFile(templatePath, []byte(templateContent), 0644)
+	if err := os.WriteFile(templatePath, []byte(templateContent), 0644); err != nil {
+		t.Fatalf("Failed to create test template: %v", err)
+	}
 
 	// Clear the template cache before test
 	clearTemplateCache()
@@ -155,11 +161,15 @@ func TestHandleSendPOST(t *testing.T) {
 func TestHandleSendInvalidForm(t *testing.T) {
 	tmpDir := t.TempDir()
 	templatesDir := filepath.Join(tmpDir, "templates")
-	os.Mkdir(templatesDir, 0755)
+	if err := os.Mkdir(templatesDir, 0755); err != nil {
+		t.Fatalf("Failed to create templates directory: %v", err)
+	}
 
 	templateContent := `<html><body>Test</body></html>`
 	templatePath := filepath.Join(templatesDir, "index.html")
-	os.WriteFile(templatePath, []byte(templateContent), 0644)
+	if err := os.WriteFile(templatePath, []byte(templateContent), 0644); err != nil {
+		t.Fatalf("Failed to create test template: %v", err)
+	}
 
 	clearTemplateCache()
 
@@ -188,7 +198,9 @@ func TestTemplateCache(t *testing.T) {
 
 	templateContent := `<html><body>Cached</body></html>`
 	templatePath := filepath.Join(templatesDir, "index.html")
-	os.WriteFile(templatePath, []byte(templateContent), 0644)
+	if err := os.WriteFile(templatePath, []byte(templateContent), 0644); err != nil {
+		t.Fatalf("Failed to create test template: %v", err)
+	}
 
 	clearTemplateCache()
 

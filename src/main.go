@@ -23,6 +23,7 @@ func main() {
 		// Generate a random key if not provided (not recommended for production)
 		csrfKey = "dev-key-change-in-production"
 	}
+	_ = csrfKey // TODO: Use CSRF protection in handlers
 
 	// Set up paths relative to binary location
 	exePath, err := os.Executable()
