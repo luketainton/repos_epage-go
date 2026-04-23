@@ -21,13 +21,15 @@ jobs:
           cache: true
 
       - name: Run tests
-        run: go test -v -race -coverprofile=coverage.out ./src
+        run: |
+            go test -v -race -coverprofile=coverage.out ./src
+            cat coverage.out
 
-      - name: Upload coverage
-        uses: actions/upload-artifact@v3
-        with:
-          name: coverage
-          path: coverage.out
+      # - name: Upload coverage
+      #   uses: actions/upload-artifact@v3
+      #   with:
+      #     name: coverage
+      #     path: coverage.out
 
   lint:
     name: Lint
