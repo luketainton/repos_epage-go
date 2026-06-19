@@ -74,7 +74,7 @@ jobs:
         run: CGO_ENABLED=0 GOOS=windows GOARCH=amd64 go build -o epage-windows.exe ./src
 
       - name: Upload artifacts
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v7
         with:
           name: binaries
           path: |
