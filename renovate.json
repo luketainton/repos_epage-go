@@ -30,6 +30,11 @@
     {
       "matchUpdateTypes": ["patch"],
       "automerge": true
+    },
+    {
+      "description": "Keep artifact uploads compatible with Gitea",
+      "matchPackageNames": ["actions/upload-artifact"],
+      "allowedVersions": "<4"
     }
   ]
 }
