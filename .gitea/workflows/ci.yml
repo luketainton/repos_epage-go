@@ -17,7 +17,7 @@ jobs:
       - name: Set up Go
         uses: actions/setup-go@v6
         with:
-          go-version: '1.26'
+          go-version: '1.27'
           cache: true
 
       - name: Run tests
@@ -41,11 +41,11 @@ jobs:
       - name: Set up Go
         uses: actions/setup-go@v6
         with:
-          go-version: '1.26'
+          go-version: '1.27'
           cache: true
 
       - name: Install golangci-lint
-        run: go install github.com/golangci/golangci-lint/cmd/golangci-lint@latest
+        run: go install github.com/golangci/golangci-lint/v2/cmd/golangci-lint@v2.15.0
 
       - name: Run linter
         run: golangci-lint run ./src
@@ -61,7 +61,7 @@ jobs:
       - name: Set up Go
         uses: actions/setup-go@v6
         with:
-          go-version: '1.26'
+          go-version: '1.27'
           cache: true
 
       - name: Build binary (Linux)

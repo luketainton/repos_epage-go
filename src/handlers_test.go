@@ -317,7 +317,9 @@ func TestServerIntegration(t *testing.T) {
 	if resp.StatusCode != http.StatusOK {
 		t.Errorf("Expected status 200, got %d", resp.StatusCode)
 	}
-	resp.Body.Close()
+	if err := resp.Body.Close(); err != nil {
+		t.Errorf("Failed to close response body: %v", err)
+	}
 
 	// Test POST
 	formData := "name=John&email=john@example.com&message=Hello"
@@ -332,7 +334,9 @@ func TestServerIntegration(t *testing.T) {
 	if resp.StatusCode != http.StatusOK {
 		t.Errorf("Expected status 200, got %d", resp.StatusCode)
 	}
-	resp.Body.Close()
+	if err := resp.Body.Close(); err != nil {
+		t.Errorf("Failed to close response body: %v", err)
+	}
 
 	_ = formData // silence unused var
 }
