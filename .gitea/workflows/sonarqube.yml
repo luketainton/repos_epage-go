@@ -25,7 +25,7 @@ jobs:
         run: go test -v -coverprofile=coverage.out ./src
 
       - name: Run SonarQube scanner
-        uses: SonarSource/sonarqube-scan-action@v8.3
+        uses: SonarSource/sonarqube-scan-action@v8.4
         env:
           SONAR_HOST_URL: ${{ vars.SONAR_URL }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
